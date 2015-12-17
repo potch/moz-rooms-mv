@@ -3,8 +3,6 @@ var ical = require('ical');
 var http = require('http');
 var rooms = require('./rooms2.json');
 
-const today = new Date();
-
 function roomURL(email) {
   return 'https://www.google.com/calendar/ical/' + encodeURIComponent(email) + '/public/basic.ics';
 }
@@ -16,6 +14,7 @@ function timeFmt(d) {
 var status = [];
 
 function update() {
+  var now = Date.now();
   Promise.all(rooms.map(function (room) {
     return new Promise(function (resolve, reject) {
       ical.fromURL(
@@ -32,7 +31,7 @@ function update() {
             var evt = data[q];
             var start = new Date(evt.start);
             var end = new Date(evt.end);
-            if (start < today && today < end) {
+            if (start.valueOf() - (15 * 60 * 1000) < now && now < end.valueOf()) {
               resolve({
                 name: room.name,
                 room: room,
