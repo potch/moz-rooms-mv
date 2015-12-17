@@ -1,0 +1,15 @@
+{
+  "name": "moz-rooms-mv",
+  "version": "1.0.0",
+  "description": "show those rooms!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "potch",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3",
+    "ical": "^0.4.0"
+  }
+}

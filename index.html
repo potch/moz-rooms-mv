@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link href='//fonts.googleapis.com/css?family=Fira+Sans:300,400,300italic' rel='stylesheet' type='text/css'>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        font-family: 'Fira Sans', sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        background: #222;
+        max-height: 100vh;
+      }
+      .app {
+        padding: 1vw;
+      }
+      .floor {
+        display: flex;
+        flex-flow: column wrap;
+        height: 80vh;
+        flex: 1 1 10px;
+        padding: 1vw 2vw;
+      }
+      .room {
+        margin: .1em 1em 0 0;
+        font-size: 2vmax;
+      }
+      .room.busy {
+        color: #d44;
+      }
+      .room.free {
+        color: #8d8;
+      }
+      h1 {
+        text-align: center;
+        font-size: 5vw;
+        margin: 0;
+        font-weight: 300;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <h1>Floor <span class="floorno"></span> Conference Rooms</h1>
+      <div class="floor floor-1"></div>
+    </div>
+    <script>
+      var floor = document.querySelector('.floor');
+
+      var floorNum = parseInt(window.location.search.substr(1)) || 2;
+      document.querySelector('.floorno').innerHTML = floorNum;
+
+      function update() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', '/status?' + Math.random());
+        xhr.responseType = 'json';
+        xhr.onload = function() {
+          var status = this.response;
+          floor.innerHTML = ''
+          status.sort(function (a, b) {
+            return a.name > b.name ? 1 : -1;
+          }).forEach(function (room) {
+            if (!room.name) return;
+            if (room.room.floor !== floorNum) return;
+
+            var el = document.createElement('span');
+
+            el.innerHTML = room.name;
+            el.classList.add('room');
+            el.classList.add(room.status);
+
+            floor.appendChild(el);
+          });
+        };
+        xhr.send();
+      }
+
+      update();
+      setInterval(update, 15 * 1000);
+    </script>
+  </body>
+</html>
