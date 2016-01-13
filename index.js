@@ -24,7 +24,7 @@ function update() {
             resolve({
               name: room.name,
               status: 'error',
-              error: error
+              error: err
             });
           }
           for (var q in data) {
