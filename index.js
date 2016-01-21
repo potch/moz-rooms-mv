@@ -37,6 +37,7 @@ function update() {
                 room: room,
                 evt: evt,
                 ends: end,
+                wing: room.wing,
                 status: 'busy'
               });
               return;
@@ -45,6 +46,7 @@ function update() {
           resolve({
             name: room.name,
             room: room,
+            wing: room.wing,
             status: 'free'
           });
         }

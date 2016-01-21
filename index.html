@@ -25,11 +25,17 @@
       }
       .floor {
         display: flex;
-        flex-flow: column wrap;
+        flex-direction: row;
         height: 80vh;
         flex: 1 1 10px;
         padding: 1vw 2vw;
       }
+      .wing {
+        display: flex;
+        flex: 1;
+        flex-flow: column wrap;
+      }
+
       .room {
         margin: .1em 1em 0 0;
         font-size: 2vmax;
@@ -52,10 +58,14 @@
   <body>
     <div class="app">
       <h1>Floor <span class="floorno"></span> Conference Rooms</h1>
-      <div class="floor floor-1"></div>
+      <div class="floor floor-2">
+        <div class="wing wing-left"></div>
+        <div class="wing wing-right"></div>
+      </div>
     </div>
     <script>
-      var floor = document.querySelector('.floor');
+      var floor2left = document.querySelector('.floor .wing-left');
+      var floor2right = document.querySelector('.floor .wing-right');
 
       var floorNum = parseInt(window.location.search.substr(1)) || 2;
       document.querySelector('.floorno').innerHTML = floorNum;
@@ -66,7 +76,8 @@
         xhr.responseType = 'json';
         xhr.onload = function() {
           var status = this.response;
-          floor.innerHTML = ''
+          floor2left.innerHTML = '';
+          floor2right.innerHTML = '';
           status.sort(function (a, b) {
             return a.name > b.name ? 1 : -1;
           }).forEach(function (room) {
@@ -79,7 +90,11 @@
             el.classList.add('room');
             el.classList.add(room.status);
 
-            floor.appendChild(el);
+            if (room.wing === 'left') {
+              floor2left.appendChild(el);
+            } else {
+              floor2right.appendChild(el);
+            }
           });
         };
         xhr.send();
